@@ -1,0 +1,26 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local models, checkpoints, logs, and generated figures
+/outputs*/
+/logs*/
+/figures/
+
+# JailBench must be obtained separately under its dataset usage requirements.
+/test_datasets/JailBench/*.csv
+
+# Evaluation outputs (keep eval/*.py source files tracked)
+/eval/perf/
+/eval/perf_expand/
+/eval/personality/
+/eval/personality_expand/
+/eval/refusal/
+/eval/refusal_expand/
+/eval/safety/
+/eval/safety_expand/
+
+# Evaluation analysis scripts
+*.ipynb

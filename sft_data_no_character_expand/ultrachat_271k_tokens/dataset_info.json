@@ -1,0 +1,110 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "ultrachat_200k",
+  "dataset_size": 3047427114,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_sft-00000-of-00003-a3ecf92756993583.parquet": {
+      "num_bytes": 243999189,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_sft-00001-of-00003-0a1804bcb6ae68c6.parquet": {
+      "num_bytes": 243897199,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_sft-00002-of-00003-ee46ed25cfae92c6.parquet": {
+      "num_bytes": 244131731,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/test_sft-00000-of-00001-f7dfac4afe5b93f4.parquet": {
+      "num_bytes": 81176553,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_gen-00000-of-00003-a6c9fb894be3e50b.parquet": {
+      "num_bytes": 243687391,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_gen-00001-of-00003-d6a0402e417f35ca.parquet": {
+      "num_bytes": 243300397,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/train_gen-00002-of-00003-c0db75b92a2f48fd.parquet": {
+      "num_bytes": 243497356,
+      "checksum": null
+    },
+    "hf://datasets/HuggingFaceH4/ultrachat_200k@8049631c405ae6576f93f445c6b8166f76f5505a/data/test_gen-00000-of-00001-3d4cd8309148a71f.parquet": {
+      "num_bytes": 80359907,
+      "checksum": null
+    }
+  },
+  "download_size": 1624049723,
+  "features": {
+    "prompt": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "prompt_id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "messages": [
+      {
+        "content": {
+          "dtype": "string",
+          "_type": "Value"
+        },
+        "role": {
+          "dtype": "string",
+          "_type": "Value"
+        }
+      }
+    ]
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 4671476837,
+  "splits": {
+    "train_sft": {
+      "name": "train_sft",
+      "num_bytes": 1397058554,
+      "num_examples": 207865,
+      "shard_lengths": [
+        75289,
+        75288,
+        57288
+      ],
+      "dataset_name": "ultrachat_200k"
+    },
+    "test_sft": {
+      "name": "test_sft",
+      "num_bytes": 154695659,
+      "num_examples": 23110,
+      "dataset_name": "ultrachat_200k"
+    },
+    "train_gen": {
+      "name": "train_gen",
+      "num_bytes": 1347396812,
+      "num_examples": 256032,
+      "shard_lengths": [
+        95344,
+        95344,
+        65344
+      ],
+      "dataset_name": "ultrachat_200k"
+    },
+    "test_gen": {
+      "name": "test_gen",
+      "num_bytes": 148276089,
+      "num_examples": 28304,
+      "dataset_name": "ultrachat_200k"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

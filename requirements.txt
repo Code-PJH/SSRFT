@@ -1,0 +1,30 @@
+# Core model training and inference
+torch
+transformers==4.57.6
+datasets>=3.0,<4
+accelerate
+peft
+safetensors
+sentencepiece
+
+# Data processing and evaluation
+numpy
+pandas
+scipy
+scikit-learn
+tqdm
+
+# API and configuration
+openai
+python-dotenv
+
+# Analysis notebooks and training logs
+ipython
+jupyter
+matplotlib
+seaborn
+tensorboard
+
+# Evaluation tools
+lm_eval[hf]
+einops #MD-Judge_v0.2 need
