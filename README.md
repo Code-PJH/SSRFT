@@ -1,8 +1,62 @@
-# SSRFT: Supervised Safe-Role Fine-Tuning
+<div align="center">
 
-Official implementation for **Beyond Refusal Patterns: Safe-Role Internalization for Robust and Efficient LLM Safety Alignment**.
+# Beyond Refusal Patterns: Safe-Role Internalization for Robust and Generalizable LLM Safety Alignment
 
-SSRFT constructs a Safe-Role Question-Answer (SRQA) dataset from psychometric questions, a small set of jailbreak prompts, and a predefined safe-role description. The generated responses are validated and optionally expanded into scenario-based interactions before supervised fine-tuning.
+Learning a persistent safe role through ***S***upervised ***S***afe-***R***ole ***F***ine-***T***uning.
+
+[![arXiv](https://img.shields.io/badge/arXiv-2610.07023-b31b1b.svg)](https://arxiv.org/abs/2610.07023)
+
+
+[Overview](#overview) · [Framework](#framework) · [Results](#results-at-a-glance) · [Installation](#installation) · [Training](#training) · [Evaluation](#evaluation)
+
+</div>
+
+<!-- TODO: Add public model or dataset links when available. -->
+
+---
+
+## Overview
+
+SSRFT reformulates LLM safety alignment as **safe-role internalization**: a model learns safety-oriented values, behavioral principles, and interaction styles through role-guided supervision. The safe role is learned in model parameters during training.
+
+The framework builds a **Safe-Role Question-Answer (SRQA)** dataset from psychometric questions, a limited set of jailbreak prompts, and a predefined safe-role description. Generated answers are validated and expanded into diverse scenarios before supervised fine-tuning.
+
+| Goal | Approach |
+| :--- | :--- |
+| **Robust safety** | Learn role-consistent behavior that persists under prefilling attack. |
+| **Generalization** | Use diverse role-oriented scenarios to support safety beyond seen jailbreak domains. |
+| **Helpfulness** | Teach a helpful yet safe role to reduce over-refusal on benign queries. |
+| **Simple training** | Use a standard SFT pipeline. |
+
+## Framework
+
+![Overview of the SSRFT framework](assets/SSRFT_framework.png)
+
+
+1. **Collect questions:** adapt psychometric questionnaires and sample jailbreak prompts.
+2. **Construct a safe role:** specify values, behavioral principles, and interaction style.
+3. **Synthesize and validate:** generate role-consistent QA pairs with an LLM and quality checks.
+4. **Expand scenarios:** diversify psychometric QA pairs while preserving role semantics.
+5. **Fine-tune:** train on SRQA to internalize the safe role.
+
+## Results at a glance
+
+Selected results from the paper's expanded-data experiments, compared with the matched standard-SFT baseline. **ASR** is attack success rate (lower is better); **Full Compliance** is measured on harmless XSTest queries (higher is better).
+
+| Backbone | Standard ASR ↓, SFT → SSRFT | Prefilling ASR ↓, SFT → SSRFT | Full Compliance ↑, SFT → SSRFT |
+| :--- | :---: | :---: | :---: |
+| Gemma2-2B | 7.68% → **1.76%** | 65.12% → **23.28%** | 24.4% → **42.0%** |
+| Llama3.1-8B | 15.31% → **8.69%** | 42.64% → **16.54%** | 30.0% → **54.0%** |
+| LRC-4B | 22.20% → **18.83%** | 12.72% → **4.98%** | **49.6%** → 48.8% |
+
+![Compliance and refusal rates on the XSTest safe subset](assets/over-refusal.png)
+Standard ASR averages five benchmarks; prefilling ASR averages three, so the two columns use different benchmark sets.
+
+**SSRFT's benefits extend beyond standard ASR to prefilling robustness, OOD generalization, and reduced over-refusal.** The magnitude of these gains varies with model capability and existing alignment. The paper's training-dynamics analysis suggests that already aligned Instruct models must adapt an established behavioral policy, while safe-role internalization requires the capacity to infer and consistently apply underlying behavioral principles. This helps explain the stronger gains on several Base models and the more selective improvements on Instruct models. The paper also evaluates persona stability and general capability preservation on nine benchmarks.
+
+
+
+---
 
 > **Content warning:** This repository contains safety-evaluation and jailbreak datasets that may include harmful or toxic language.
 
@@ -14,6 +68,7 @@ SSRFT constructs a Safe-Role Question-Answer (SRQA) dataset from psychometric qu
 ├── eval/                         # Safety, refusal, personality, and judge implementations
 ├── train/                        # Full-parameter and LoRA/DoRA training
 ├── utils/                        # Model wrappers and data helpers
+├── assets/                       # README visuals and original paper figure
 ├── sft_data/                     # Non-expanded SRQA training data
 ├── sft_data_expand/              # Expanded SRQA training data
 ├── sft_data_no_character/        # Non-expanded standard-SFT baseline data
@@ -183,16 +238,14 @@ The v0.2 functions first try to reuse target-model responses from the correspond
 
 ### Important: filter safety results by the official splits
 
-> **IMPORTANT:** Raw results must be filtered with the provided dataset splits
-> before computing accurate test/ID/OOD metrics.
-> The unfiltered `overall_stats` field is not a held-out test result unless
-> the input CSV has already been restricted to the intended split.
+> **IMPORTANT:** Raw results must be filtered with the provided dataset splits before computing accurate test/ID/OOD metrics.
+> The unfiltered `overall_stats` field is not a held-out test result unless the input CSV has already been restricted to the intended split.
 
 ## Reproducibility notes
 
 - `MODEL_NAME` determines the evaluation result directory. Keep its spelling and capitalization identical across training, evaluation, and analysis.
 - Separate expanded and non-expanded results when their model basenames are identical; otherwise later runs can overwrite earlier results.
 - Training currently loads models with `device_map="auto"`; the supplied setup targets the single-process experiment environment. Adjust model loading before using DDP, FSDP, or DeepSpeed.
-- Checkpoints are saved with `save_only_model=True`, so optimizer and scheduler states are not available for exact training resumption.
+- Checkpoints are saved with `save_only_model=True` by default, so optimizer and scheduler states are not available for exact training resumption.
 - Hugging Face loading uses `trust_remote_code=True`. Review third-party model repositories before running their code.
 - Dataset and model redistribution remains subject to the licenses and terms of their respective upstream sources.
