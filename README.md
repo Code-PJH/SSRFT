@@ -82,17 +82,11 @@ The analysis notebooks are intentionally excluded from this release because they
 
 ## JailBench data
 
-Due to the JailBench dataset's usage requirements, the complete dataset is not redistributed in this repository. We retain the dataset-splitting script used in our experiments. To obtain the original dataset, please contact the [JailBench research team](https://github.com/STAIR-BUPT/JailBench/tree/main).
+JailBench-seed, its experiment splits, and the sampled JailBench attack set are provided under `test_datasets/JailBench/`. They originate from [STAIR-BUPT/JailBench](https://github.com/STAIR-BUPT/JailBench) and are distributed with its [MIT license](test_datasets/JailBench/LICENSE). The complete JailBench attack dataset is available from the upstream repository.
 
-After obtaining `JailBench-seed.csv` and `JailBench.csv`, place them under `test_datasets/JailBench/` and run:
+For JailBench-seed, 18 categories were selected for OOD testing; the remaining examples were stratified into equal-sized training and ID-test sets. The directory contains `train.csv`, `id_test.csv`, `ood_test.csv`, and `test.csv` (the combined test set). `JailBench_sampled_1080.csv` is a stratified sample of the full JailBench dataset. Both selections used `random_state=42`.
 
-```bash
-python jailbench_split.py
-```
-
-The script converts the original headers to `q_id, question, 一级领域, content_policy_name`, writes normalized copies of the two source CSVs to the output directory, and then reproduces the train, ID-test, OOD-test, combined-test, and 1,080-example evaluation files used in the paper. With the default arguments, the normalized source files replace the originals in place.
-
-See [JailBench dataset setup](test_datasets/JailBench/README.md) for the expected source files, exact splitting procedure, and generated filenames.
+For JailbreakLLMs, the repository includes the question set, experiment splits, and the sampled 1,170-example attack set. The full prompt-augmented set is not included; the source prompts and questions are available from [the upstream repository](https://github.com/verazuo/jailbreak_llms).
 
 ## Installation
 
@@ -165,6 +159,8 @@ The principal file chain is:
 
 `sft_data_no_character_expand` is a preassembled, size-matched baseline containing sampled external instruction data and refusal data. This release includes the resulting training artifacts but not a script that reproduces the external sampling step.
 
+The baseline's UltraChat data is sampled from [HuggingFaceH4/ultrachat_200k](https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k) (`train_sft`; upstream dataset card: MIT). Its MOSS data is sampled from [YeungNLP/moss-003-sft-data](https://huggingface.co/datasets/YeungNLP/moss-003-sft-data), a reformatted version of [OpenMOSS MOSS-003-SFT](https://huggingface.co/datasets/OpenMOSS-Team/moss-003-sft-data) (original dataset card: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)). Both were shuffled and sampled; MOSS was additionally filtered and reformatted. The YeungNLP dataset card does not state a separate license for its reformatted version.
+
 ## Training
 
 `train.sh` records the four Qwen3-4B training configurations used in the experiments. It is an editable paper-reproduction script, not a machine-independent launcher.
@@ -207,6 +203,8 @@ python -m train.train \
 ## Evaluation
 
 The four shell files are editable examples. Set each model path and result directory for the local environment, then keep only the desired function calls active.
+
+The XSTest prompts are from [XSTest](https://github.com/paul-rottger/xstest) by Paul Röttger, Hannah Rose Kirk, Bertie Vidgen, Giuseppe Attanasio, Federico Bianchi, and Dirk Hovy. The prompts are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); `xstest_safe.csv` is a selection of the harmless prompts. The license for any model completions may differ.
 
 ```bash
 bash run_personality_eval.sh

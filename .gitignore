@@ -9,9 +9,6 @@ __pycache__/
 /logs*/
 /figures/
 
-# JailBench must be obtained separately under its dataset usage requirements.
-/test_datasets/JailBench/*.csv
-
 # Evaluation outputs (keep eval/*.py source files tracked)
 /eval/perf/
 /eval/perf_expand/
